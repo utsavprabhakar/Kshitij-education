@@ -1,0 +1,27 @@
+<% include partials/header %>
+<div class="container">
+<header class="jumbotron">
+    <div class="container">
+       <h1>This is the forms page!</h1>   
+ </div>
+</header>
+<div class="row text-center" style="display:flex; flex-wrap: wrap;">
+        <% kes.forEach(function(ke){ %>
+        <div class="col-md-4 col-sm-6" >
+            <div class="caption">
+                <h4> <%= ke.name %> </h4>
+            </div>
+            <div class="caption">
+                <h4> <%= ke.email %> </h4>
+            </div>
+            <div class="caption">
+                <h4> <%= ke.message %> </h4>
+            </div>
+            
+           
+        </div>
+        <% }); %>
+        </div>
+</div>  
+
+<% include partials/footer %>

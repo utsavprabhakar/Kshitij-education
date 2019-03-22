@@ -1,0 +1,35 @@
+th{
+	text-align: center!important;
+}
+
+tr
+{
+	font-weight: 300;
+}
+
+//CLASS12
+ul, li{
+margin:0;
+padding:0 0 0 15px;    
+}
+
+.column{
+    float: left;
+    margin: 0 20px 0 0;
+}
+
+.column h3
+{
+	color:#fff;
+}
+.samplepapers
+{
+	margin-left: 130px;
+	margin-right: 130px;
+}
+
+.assignments
+{
+	margin-left: 80px;
+	margin-right: 80px;
+}
