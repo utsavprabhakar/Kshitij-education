@@ -3,7 +3,7 @@ var app=express();
 var bodyParser=require("body-parser");
 var mongoose=require("mongoose");
 //var session = require('express-session');
-//var cookieParser = require('cookie-parser');
+var cookieParser = require('cookie-parser');
 var _ = require('lodash');
 //var flash = require('connect-flash');
 const port= process.env.PORT || 3000;
@@ -22,8 +22,8 @@ app.set("view engine", "ejs");
 
  
 app.get("/", function(req, res){
-    console.log(req.user);
-    res.render("index");
+    //console.log(req.user);
+    res.render("user");
  });
 
  app.get('/user/:id', function(req, res){
@@ -41,9 +41,15 @@ app.get("/", function(req, res){
    //console.log(body);
    User.findByCredentials(body.email, body.password).then((user)=>{
       //console.log(user);
-     return user.generateAuthToken().then((token)=>{
-       res.header('x-auth', token).send(user);
-     })
+      //return user.generateAuthToken().then((token)=>{
+        // console.log(user.tokens[0].token);
+         var token = user.tokens[0].token;
+         res.cookie('auth-token',token,{
+            maxAge: 9000000,
+            httpOnly: true
+         });
+         res.header('x-auth', token).send({user,token});
+    // })
    }).catch((e)=>{
      res.status(400).send();
    })
@@ -60,15 +66,19 @@ app.get("/", function(req, res){
 
  app.post('/register', (req,res)=>{
    var body = _.pick(req.body, ["email", "password"]);
-   //console.log(body);
-   var newUser = new User(body);
-   newUser.save().then(()=>{
-     //xconsole.log('amen1')
-     return newUser.generateAuthToken();
+   console.log(req);
+   var user = new User(body);
+   user.save().then(()=>{
+     //console.log('amen1')
+     return user.generateAuthToken();
    }).then((token)=>{
-     //console.log("amen2");
-     console.log(token);
-     res.header('x-auth', token).send("hehe");
+    // console.log("amen2");
+     //console.log(token);
+     res.cookie('auth-token',token,{
+      maxAge: 900000,
+      httpOnly: true
+   });
+     res.header('x-auth', token).send({user, token});
    }).catch((e)=>{
      console.log('amen3');
      res.status(400).send(e);
@@ -76,9 +86,9 @@ app.get("/", function(req, res){
  });
   
  app.get('/profile',authenticate,(req, res)=>{
-    res.render('profile', {
-       user: req.user
-    });
+    //console.log("**************");
+    //console.log(req);
+    res.send("hehe finally worked");
  });
  
  app.get("/introduction", function(req, res){
